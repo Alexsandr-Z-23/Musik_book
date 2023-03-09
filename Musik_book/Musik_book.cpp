@@ -1,21 +1,21 @@
 #define _CRT_SECURE_NO_WARNINGS
-
 #include <iostream>
 #include <fstream>
 #include <string>   
 #include <filesystem> 
 #include <stdio.h>
 #include<Windows.h>
-const int MAXSIZE=1000;
+
+const int MAXSIZE = 1000;
 using namespace std;
 
 
 struct MusicCard
 {
-	char MusicName [100];
-	char AuthorName[100];
-	char DATE[12];
-	char TextMusic[1000];
+	char MusicName[100]{ '0' };
+	char AuthorName[100]{ '0' };
+	char DATE[12]{ '0' };
+	char TextMusic[1000]{ '0' };
 };
 int main();
 int get_line_size(char str[], int max)// высчитвание длену строки
@@ -43,15 +43,16 @@ int ListMusic(MusicCard* List)
 	//char Buf_Str[MAXSIZE];
 	char Buf_Str2[MAXSIZE];//массив куда считываеться файл
 	int lengt;// размер длены строки
-	
+
 	char Name[] = "Название песни : ";//масивы на первое вхождение в буфере для указателя 
 	char Autor[] = "Автор : ";
 	char Year[] = "Год издания : ";
 	int ch1 = '*';
-	char * name, * autor, * year;// указатели буфера для определениея поля структуры
+	char* name, * autor, * year;// указатели буфера для определениея поля структуры
 
 	int counter_list = 0;// счетчик структуры  list
-	int Index = 0;// индекс полей структуры структуры list
+
+	int Index = -1;// индекс полей структуры структуры list
 	int line = 0, any = 0;
 	int nm = 0, at = 0, dt = 0, tt = 0; //счетчики
 
@@ -110,59 +111,82 @@ int ListMusic(MusicCard* List)
 			{
 				counter_list++;
 				Index = 0;
+				nm = 0;
+				at = 0;
+				dt = 0;
+				tt = 0;
+
+
 				cout << counter_list << endl;
 			}
 			else { Index++; }
 
 			//for (int i = 0; i < line; i++)
-			
-
-				if (Index == 0)
-				{
-					List[counter_list].MusicName[nm] = '\0';
-				}
-				if (Index == 1) {
-					List[counter_list].AuthorName[at] = '\0';
-				}
-				if (Index == 2) {
-					List[counter_list].DATE[dt] = '\0';
-				}
-				if (Index >= 3) {
-					List[counter_list].TextMusic[tt] = '\0';
-				}
 
 
-				if (name != NULL)
+			if (Index == 0)
+			{
+				List[counter_list].MusicName[nm] = '\0';
+			}
+			if (Index == 1) {
+				List[counter_list].AuthorName[at] = '\0';
+			}
+			if (Index == 2) {
+				List[counter_list].DATE[dt] = '\0';
+			}
+
+			if (Index >= 3) {
+				List[counter_list].TextMusic[tt] = '\0';
+			}
+
+
+
+			if (name != NULL)
+			{
+				for (int i = 0; i < strlen(Buf_Str2); i++)
 				{
-					for (int i = 0; i < strlen(Buf_Str2); i++)
-					{
-						List[counter_list].MusicName[nm] = Buf_Str2[i];
-						nm++;
-					}
-					
-					//strncpy(&List[counter_list].MusicName[nm], Buf_Str2, lengt);
-					
+					List[counter_list].MusicName[nm] = Buf_Str2[i];
+					nm++;
 				}
-				if (autor != NULL)
+				//strncpy(&List[counter_list].MusicName[nm], Buf_Str2, lengt);
+
+			}
+			if (autor != NULL)
+			{
+				//List[counter_list].AuthorName[at] = Buf_Str2[i];
+
+				for (int i = 0; i < strlen(Buf_Str2); i++)
 				{
-					//List[counter_list].AuthorName[at] = Buf_Str2[i];
-					strncpy(&List[counter_list].AuthorName[at], Buf_Str2, lengt);
+					List[counter_list].AuthorName[at], Buf_Str2[i];
 					at++;
 				}
-				if (year != NULL)
+				/*strncpy(&List[counter_list].AuthorName[at], Buf_Str2, lengt);
+				at++;*/
+			}
+			if (year != NULL)
+			{
+				for (int i = 0; i < strlen(Buf_Str2); i++)
 				{
-					//List[counter_list].DATE[dt] = Buf_Str2[i];
-					strncpy(&List[counter_list].DATE[dt], Buf_Str2, lengt);
+					List[counter_list].DATE[dt], Buf_Str2[i];
 					dt++;
 				}
-				if (Index >= 4)
+				//List[counter_list].DATE[dt] = Buf_Str2[i];
+				/*strncpy(&List[counter_list].DATE[dt], Buf_Str2, lengt);
+				dt++;*/
+			}
+			if (Index >= 4)
+			{
+				for (int i = 0; i < strlen(Buf_Str2); i++)
 				{
-					//List[counter_list].TextMusic[tt] = Buf_Str2[i];
-					strncpy(&List[counter_list].TextMusic[tt], Buf_Str2, strlen(Buf_Str2));
+					List[counter_list].TextMusic[dt], Buf_Str2[i];
 					tt++;
 				}
-			
-			Buf_Str2[0] = '\0';
+				//List[counter_list].TextMusic[tt] = Buf_Str2[i];
+				/*strncpy(&List[counter_list].TextMusic[tt], Buf_Str2, strlen(Buf_Str2));
+				tt++;*/
+			}
+
+
 			//delete[] Buf_Str2;
 			//for (int i = 0; i <= /*counter_list*/ (sizeof(List->MusicName) != NULL); i++)
 			//	{
@@ -178,89 +202,87 @@ int ListMusic(MusicCard* List)
 	_getwch();
 	return counter_list;
 }
-		//int Index = 0;
-		//do
-		//{
-		//	if (Index == 0)
-		//	{
-		//		fgets(Buf_Str2, MAXSIZE, f);
-		//		strncpy((List[Index].MusicName), Buf_Str2, strlen(Buf_Str2));
-		//		for (int i = 0; i < strlen(Buf_Str2); i++)
-		//			cout << List[i].MusicName;N++;
-		//	}
-		//	if (Index == 1)
-		//	{
-		//		fgets(Buf_Str2, MAXSIZE, f);
-		//		strncpy(List[Index].AuthorName, Buf_Str2, strlen(Buf_Str2));
-		//		for (int i = 0; i < strlen(Buf_Str2); i++)
-		//			cout << List[i].AuthorName;
-		//	}
-		//	if (Index == 2)
-		//	{
-		//		fgets(Buf_Str2, MAXSIZE, f);
-		//		strncpy(List[Index].DATE, Buf_Str2, strlen(Buf_Str2));
-		//		for (int i = 0; i < strlen(Buf_Str2); i++)
-		//			cout << List[i].DATE;
-		//	}
-		//	//if (Index >= 3)
-		//	//{
-		//	//	//char str= "*************";
-		//	//	if(strcmp(Buf_Str2,Buf_Str ) && f!=NULL)
-		//	//	{
-		//	//		for (int i = 0; i < strlen(Buf_Str2); i++)
-		//	//		{
-		//	//			fgets(Buf_Str2, MAXSIZE, f);
-		//	//			strncpy(List->FileName, Buf_Str2, strlen(Buf_Str2));
+//int Index = 0;
+//do
+//{
+//	if (Index == 0)
+//	{
+//		fgets(Buf_Str2, MAXSIZE, f);
+//		strncpy((List[Index].MusicName), Buf_Str2, strlen(Buf_Str2));
+//		for (int i = 0; i < strlen(Buf_Str2); i++)
+//			cout << List[i].MusicName;N++;
+//	}
+//	if (Index == 1)
+//	{
+//		fgets(Buf_Str2, MAXSIZE, f);
+//		strncpy(List[Index].AuthorName, Buf_Str2, strlen(Buf_Str2));
+//		for (int i = 0; i < strlen(Buf_Str2); i++)
+//			cout << List[i].AuthorName;
+//	}
+//	if (Index == 2)
+//	{
+//		fgets(Buf_Str2, MAXSIZE, f);
+//		strncpy(List[Index].DATE, Buf_Str2, strlen(Buf_Str2));
+//		for (int i = 0; i < strlen(Buf_Str2); i++)
+//			cout << List[i].DATE;
+//	}
+//	//if (Index >= 3)
+//	//{
+//	//	//char str= "*************";
+//	//	if(strcmp(Buf_Str2,Buf_Str ) && f!=NULL)
+//	//	{
+//	//		for (int i = 0; i < strlen(Buf_Str2); i++)
+//	//		{
+//	//			fgets(Buf_Str2, MAXSIZE, f);
+//	//			strncpy(List->FileName, Buf_Str2, strlen(Buf_Str2));
 
-		//	//		}
-		//	//		for (int i = 0; i < strlen(Buf_Str2); i++)
-		//	//			cout << i << List[i].FileName;
-		//	//	} 
-		//	//	//if ((Index = 4) == NULL)continue;
-		//	//		//else cout << "[" << Index - 3 << "] ";
-		//	//}
-		//	//Index++;
-		//	
-		//	/*return Index;*/
-		//} while (!feof(f));
-	
+//	//		}
+//	//		for (int i = 0; i < strlen(Buf_Str2); i++)
+//	//			cout << i << List[i].FileName;
+//	//	} 
+//	//	//if ((Index = 4) == NULL)continue;
+//	//		//else cout << "[" << Index - 3 << "] ";
+//	//}
+//	//Index++;
+//	
+//	/*return Index;*/
+//} while (!feof(f));
 
-	
+
+
 
 void MusicText(MusicCard* List)
 {
 	system("cls");
-	
+	int a;
 	int al = 1;/*sizeof(List->MusicName) / sizeof(List->MusicName);*/
 	cout << "Выберите музыкальное произведение: " << endl;
 	for (int i = 0; i < 5; i++)
 	{
-		cout <<"["<< al<<"] ";
-		printf("%s \n", &List[i].MusicName);
+		cout << "[" << al << "] ";
+		printf("%s \n", List[i].MusicName);
 		al++;
 	}
-	int a;
 	cin >> a;
-	if (a == al)
+	for (int i = 0; i < 5; i++)
+	{
+
+		if (a - 1 == i)
 		{
 			int count = 1;
-			for (int i = 0; i < (sizeof(List->TextMusic) != NULL); i++) {
+			for (int i = 0; i < (sizeof(List[i].TextMusic) != NULL); i++) {
 				cout << "[" << count << "] ";
-				printf("%s \n",&List[i].TextMusic[i]);
+				printf("%s \n", List[i].TextMusic);
 				count++;
 			}
 		}
+	}
 	while ((a <= 0) || (a > al))
 	{
 		cout << "Неверное значение." << endl;
-		if ((a <= 0) || (a > al)) { main();}
+		if ((a <= 0) || (a > al)) { main(); }
 	}
-	/*ifstream fin(List[a - 1].FileName, ios_base::in);
-	int count = 0; string str;
-	while (getline(fin, str)) {
-		if (count >= 3) cout << str << endl;
-		else count++;
-	}*/
+	
 	_getwch();
 };
 void SaveMusic(MusicCard* List)
@@ -312,6 +334,7 @@ void EditSong(MusicCard* List)
 //}
 
 
+
 int main() {
 
 	SetConsoleOutputCP(1251);
@@ -319,7 +342,7 @@ int main() {
 	setlocale(LC_ALL, "1251");
 	printf("Чтобы начать работу нажмите клавишу [ENTER]!!!\n");
 	_getwch();
-	
+
 
 	MusicCard* List = new MusicCard[100];
 	ListMusic(List);
@@ -345,7 +368,7 @@ int main() {
 		switch (choice) {
 			//ListMusic(List);
 		case 1:  MusicText(List); break;
-		case 2:  SaveMusic(List);break;
+		case 2:  SaveMusic(List); break;
 		case 3:  DeleteMusic(List); break;
 		case 4:  FindAuthorMusic(List); break;
 		case 5:  FindWordInMusic(List); break;
@@ -355,7 +378,7 @@ int main() {
 		}
 		system("pause");
 	}
-	
+
 	return 0;
 
 
